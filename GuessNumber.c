@@ -15,7 +15,7 @@ typedef struct {
 
 char magic_number[5]; // one extra for null terminator
 int total_guesses = 0;
-int correct_guesses = 0;
+//int base_ratio = 0;
 Player players[MAX_PLAYERS];
 int num_players = 0;
 
@@ -25,6 +25,8 @@ void generate_magic_number() {
         magic_number[i] = '0' + rand() % 10;
     }
     magic_number[4] = '\0';
+
+    printf("%s", magic_number);
 }
 
 void add_player(const char *name) {
@@ -77,12 +79,12 @@ void load_player_data() {
 }
 
 void print_stats() {
-    float lucky_ratio = (float)correct_guesses / total_guesses;
-    printf("Your lucky ratio: %.2f (%d/%d)\n", lucky_ratio, correct_guesses, total_guesses);
+    float lucky_ratio = (float)total_guesses/9999;
+    printf("Your lucky ratio: %f with %d total guesses\n", lucky_ratio, total_guesses);
     printf("Lucky ratio history (Top 5):\n");
     for (int i = 0; i < num_players; i++) {
         float ratio = (float)players[i].correct_guesses / players[i].total_guesses;
-        printf("%d. %s: %.2f (%d/%d)\n", i + 1, players[i].name, ratio, players[i].correct_guesses, players[i].total_guesses);
+        printf("%d. %s: %f (%d/%d)\n", i + 1, players[i].name, ratio, players[i].correct_guesses, players[i].total_guesses);
     }
 }
 
@@ -91,7 +93,6 @@ void check_guess(const char *guess) {
     for (int i = 0; i < 4; i++) {
         if (guess[i] == magic_number[i]) {
             printf("%c", guess[i]);
-            correct_guesses++;
             players[num_players - 1].correct_guesses++;
         } else {
             printf("-");
