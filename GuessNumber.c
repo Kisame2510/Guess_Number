@@ -9,7 +9,6 @@
 
 typedef struct {
     char name[MAX_NAME_LENGTH];
-    int correct_guesses;
     int total_guesses;
 } Player;
 
@@ -26,14 +25,13 @@ void generate_magic_number() {
     }
     magic_number[4] = '\0';
 
-    printf("%s", magic_number);
+    printf("%s \n", magic_number);
 }
 
 void add_player(const char *name) {
     if (num_players < MAX_PLAYERS) {
         strcpy(players[num_players].name, name);
-        players[num_players].correct_guesses = 0;
-        players[num_players].total_guesses = 0;
+        players[num_players].total_guesses = total_guesses;
 
         // Find the correct position to insert the new player based on total_guesses
         int i = num_players - 1;
@@ -57,7 +55,7 @@ void save_player_data() {
 
     fprintf(file, "%d\n", num_players);
     for (int i = 0; i < num_players; i++) {
-        fprintf(file, "%s %d %d\n", players[i].name, players[i].correct_guesses, players[i].total_guesses);
+        fprintf(file, "%s %d\n", players[i].name, players[i].total_guesses);
     }
 
     fclose(file);
@@ -72,7 +70,7 @@ void load_player_data() {
 
     fscanf(file, "%d", &num_players);
     for (int i = 0; i < num_players; i++) {
-        fscanf(file, "%s %d %d", players[i].name, &players[i].correct_guesses, &players[i].total_guesses);
+        fscanf(file, "%s %d", players[i].name, &players[i].total_guesses);
     }
 
     fclose(file);
@@ -83,8 +81,8 @@ void print_stats() {
     printf("Your lucky ratio: %f with %d total guesses\n", lucky_ratio, total_guesses);
     printf("Lucky ratio history (Top 5):\n");
     for (int i = 0; i < num_players; i++) {
-        float ratio = (float)players[i].correct_guesses / players[i].total_guesses;
-        printf("%d. %s: %f (%d/%d)\n", i + 1, players[i].name, ratio, players[i].correct_guesses, players[i].total_guesses);
+        float ratio = (float)players[i].total_guesses / 9999;
+        printf("%d. %s: %f with %d guess.\n", i + 1, players[i].name, ratio, players[i].total_guesses);
     }
 }
 
@@ -93,44 +91,52 @@ void check_guess(const char *guess) {
     for (int i = 0; i < 4; i++) {
         if (guess[i] == magic_number[i]) {
             printf("%c", guess[i]);
-            players[num_players - 1].correct_guesses++;
         } else {
             printf("-");
         }
     }
     printf("\n");
-    players[num_players - 1].total_guesses++;
 }
 
 int main() {
     printf("\tGUESS A MAGIC NUMBER GAME\n");
+    generate_magic_number();
+
     load_player_data();
 
     char name[MAX_NAME_LENGTH];
-    printf("Enter your name: ");
-    fgets(name, sizeof(name), stdin);
-    name[strcspn(name, "\n")] = '\0'; // remove newline character from name
+    char play_again;
+
+    do {
+        printf("Enter your name: ");
+        fgets(name, sizeof(name), stdin);
+        name[strcspn(name, "\n")] = '\0'; // remove newline character from name
 
 
-    add_player(name);
-
-    generate_magic_number();
-
-    char guess[5];
-    printf("Enter your guess (4 digits): ");
-    scanf("%s", guess);
-
-    while (strcmp(guess, "exit") != 0) {
-        check_guess(guess);
-        if (strcmp(guess, magic_number) == 0) {
-            printf("Congratulations! You've guessed the magic number!\n");
-            break;
-        }
+        char guess[5];
         printf("Enter your guess (4 digits): ");
         scanf("%s", guess);
-    }
 
-    print_stats();
+        while (strcmp(guess, "exit") != 0) {
+            check_guess(guess);
+            if (strcmp(guess, magic_number) == 0) {
+                printf("Congratulations! You've guessed the magic number!\n");
+                break;
+            }
+            printf("Enter your guess (4 digits): ");
+            scanf("%s", guess);
+        }
+
+        add_player(name);
+
+        print_stats();
+
+        total_guesses = 0;
+        printf("Do you want to play again? (Y/N): ");
+        scanf(" %c", &play_again); // Note the space before %c to consume the newline character
+        getchar(); // Consume the newline character left in the input buffer
+
+    } while (play_again == 'Y' || play_again == 'y');
 
     save_player_data();
 
