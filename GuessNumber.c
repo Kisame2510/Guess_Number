@@ -25,7 +25,7 @@ void generate_magic_number() {
     }
     magic_number[4] = '\0';
 
-    printf("%s \n", magic_number);
+    //printf("%s \n", magic_number);
 }
 
 void add_player(const char *name) {
