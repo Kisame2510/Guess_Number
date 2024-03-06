@@ -80,12 +80,12 @@ void load_player_data() {
 
 // Function to print game statistics
 void print_stats() {
-    float lucky_ratio = (float)total_guesses/9999; // Calculate the lucky ratio
-    printf("Your lucky ratio: %f with %d total guesses\n", lucky_ratio, total_guesses);
+    float lucky_ratio = 1/(float)total_guesses; // Calculate the lucky ratio
+    printf("Your lucky ratio: %f %% with %d total guesses\n", lucky_ratio*100, total_guesses);
     printf("Lucky ratio history (Top 5):\n");
-    for (int i = 0; i < num_players; i++) {
-        float ratio = (float)players[i].total_guesses / 9999; // Calculate player's lucky ratio
-        printf("%d. %s: %f with %d guesses.\n", i + 1, players[i].name, ratio, players[i].total_guesses);
+    for (int i = 0; i < 5; i++) {
+        float ratio = 1/(float)players[i].total_guesses; // Calculate player's lucky ratio
+        printf("%d. %s: %0.2f %% with %d guesses.\n", i + 1, players[i].name, ratio*100, players[i].total_guesses);
     }
 }
 

@@ -1,7 +1,11 @@
-6
+10
 aa 1
 asd 2
 tuan 3
 tuan 7
 tuan 14
 tuan 18
+27 0
+asd 8
+qwe 10
+qw 17
