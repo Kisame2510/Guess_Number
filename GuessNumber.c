@@ -54,6 +54,17 @@ void save_player_data() {
         return;
     }
 
+    // Sort players by total guesses
+    for (int i = 0; i < num_players - 1; i++) {
+        for (int j = 0; j < num_players - i - 1; j++) {
+            if (players[j].total_guesses > players[j + 1].total_guesses) {
+                Player temp = players[j];
+                players[j] = players[j + 1];
+                players[j + 1] = temp;
+            }
+        }
+    }
+
     fprintf(file, "%d\n", num_players);
     for (int i = 0; i < num_players; i++) {
         fprintf(file, "%s %d\n", players[i].name, players[i].total_guesses);
