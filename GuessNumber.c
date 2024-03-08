@@ -115,9 +115,9 @@ void check_guess(const char *guess) {
 
 // Main function
 int main() {
-    printf("----------------------------------------\n");
-    printf("|\tGUESS A MAGIC NUMBER GAME\t|\n");
-    printf("----------------------------------------\n");
+    printf("\t----------------------------------------\n");
+    printf("\t|\tGUESS A MAGIC NUMBER GAME\t|\n");
+    printf("\t----------------------------------------\n");
 
     printf("I have a 4-digit magic number, can you guess it with the least number of guesses possible?\n");
     printf("Let's see your lucky ratio !!\n");
@@ -135,6 +135,7 @@ int main() {
         name[strcspn(name, "\n")] = '\0'; // Remove newline character from name
 
         char guess[5];
+        printf("Enter 'exit' to exit the game\n");
         printf("Enter your guess (4 digits): ");
         scanf("%s", guess); // Get player's guess
 
@@ -148,9 +149,11 @@ int main() {
             printf("Enter your guess (4 digits): ");
             scanf("%s", guess); // Get next guess
         }
+        printf("\n---------------------------------------------------\n");
         printf("Don't give up. Let's try again\n");
 
         guessed:
+        printf("\n---------------------------------------------------\n");
         print_stats(); // Print game statistics
 
         total_guesses = 0; // Reset total guesses for next player
